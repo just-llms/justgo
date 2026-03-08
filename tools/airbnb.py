@@ -7,7 +7,7 @@ import structlog
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
 
-from app.config import settings
+from config import settings
 
 logger = structlog.get_logger()
 

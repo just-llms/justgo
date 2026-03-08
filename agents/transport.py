@@ -7,9 +7,9 @@ import structlog
 from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_google_genai import ChatGoogleGenerativeAI
 
-from app.api.schemas import TransportOption
-from app.config import settings
-from app.tools.tavily import tavily_search
+from api.schemas import TransportOption
+from config import settings
+from tools.tavily import tavily_search
 
 logger = structlog.get_logger()
 

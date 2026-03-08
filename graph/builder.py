@@ -3,13 +3,13 @@ from __future__ import annotations
 from langgraph.graph import END, START, StateGraph
 from langgraph.types import Send
 
-from app.agents.flights import flights_agent_node
-from app.agents.hotels import hotels_agent_node
-from app.agents.itinerary import itinerary_agent_node
-from app.agents.research import research_agent_node
-from app.agents.transport import transport_agent_node
-from app.graph.budget import budget_allocator_node
-from app.graph.state import TravelState
+from agents.flights import flights_agent_node
+from agents.hotels import hotels_agent_node
+from agents.itinerary import itinerary_agent_node
+from agents.research import research_agent_node
+from agents.transport import transport_agent_node
+from graph.budget import budget_allocator_node
+from graph.state import TravelState
 
 
 def _ranking_layer_node(state: dict) -> dict:

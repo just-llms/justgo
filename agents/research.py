@@ -7,9 +7,9 @@ import structlog
 from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_google_genai import ChatGoogleGenerativeAI
 
-from app.api.schemas import ResearchInsight
-from app.config import settings
-from app.tools.tavily import tavily_search
+from api.schemas import ResearchInsight
+from config import settings
+from tools.tavily import tavily_search
 
 logger = structlog.get_logger()
 
@@ -37,7 +37,6 @@ async def _generate_queries(user_input: dict) -> list[str]:
         model="gemini-3.1-flash-lite-preview",
         google_api_key=settings.google_api_key,
     )
-
     user_msg = (
         f"Destination: {user_input['to_destination']}\n"
         f"From: {user_input['from_city']}\n"
@@ -45,12 +44,10 @@ async def _generate_queries(user_input: dict) -> list[str]:
         f"Trip style: {', '.join(user_input.get('trip_style', []))}\n"
         f"Notes: {user_input.get('notes', 'None')}"
     )
-
     response = await llm.ainvoke([
         SystemMessage(content=QUERY_SYSTEM_PROMPT),
         HumanMessage(content=user_msg),
     ])
-
     content = response.content
     if isinstance(content, list):
         if not content:
@@ -67,24 +64,19 @@ async def _generate_queries(user_input: dict) -> list[str]:
     return json.loads(content)
 
 
-async def _structure_results(
-    raw_results: list[dict], user_input: dict
-) -> list[ResearchInsight]:
+async def _structure_results(raw_results: list[dict], user_input: dict) -> list[ResearchInsight]:
     llm = ChatGoogleGenerativeAI(
         model="gemini-3.1-flash-lite-preview",
         google_api_key=settings.google_api_key,
     )
-
     user_msg = (
         f"Destination: {user_input['to_destination']}\n\n"
         f"Raw search results:\n{json.dumps(raw_results, indent=2, default=str)}"
     )
-
     response = await llm.ainvoke([
         SystemMessage(content=STRUCTURING_PROMPT),
         HumanMessage(content=user_msg),
     ])
-
     content = response.content
     if isinstance(content, list):
         if not content:
@@ -102,7 +94,6 @@ async def _structure_results(
     content = content.strip()
     if content.startswith("```"):
         content = content.split("\n", 1)[1].rsplit("```", 1)[0].strip()
-
     parsed = json.loads(content)
     return [ResearchInsight(**item) for item in parsed]
 
@@ -110,13 +101,10 @@ async def _structure_results(
 async def research_agent_node(state: dict) -> dict:
     user_input = state["user_input"]
     destination = user_input["to_destination"]
-
     try:
         logger.info("research_agent_started", destination=destination)
-
         queries = await _generate_queries(user_input)
         logger.info("research_queries_generated", count=len(queries), queries=queries)
-
         raw_results: list[dict] = []
         for query in queries:
             try:
@@ -126,16 +114,12 @@ async def research_agent_node(state: dict) -> dict:
                 raw_results.append({"query": query, "result": result})
             except Exception as e:
                 logger.warning("tavily_query_failed", query=query, error=str(e))
-
         if not raw_results:
             logger.warning("research_no_results", destination=destination)
             return {"research": [], "errors": ["Research agent: no search results returned"]}
-
         insights = await _structure_results(raw_results, user_input)
         logger.info("research_agent_completed", insights_count=len(insights))
-
         return {"research": insights}
-
     except Exception as e:
         logger.error("research_agent_failed", error=str(e), exc_info=True)
         return {"research": [], "errors": [f"Research agent: {e}"]}

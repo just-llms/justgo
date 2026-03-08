@@ -7,9 +7,9 @@ load_dotenv()
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api.routes import router
-from app.config import settings
-from app.utils.logging import setup_logging
+from api.routes import router
+from config import settings
+from utils.logging import setup_logging
 
 if settings.langsmith_api_key:
     os.environ["LANGSMITH_API_KEY"] = settings.langsmith_api_key

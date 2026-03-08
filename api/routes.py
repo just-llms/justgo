@@ -4,8 +4,8 @@ import asyncio
 
 from fastapi import APIRouter
 
-from app.api.schemas import TripRequest
-from app.graph.builder import compiled_graph
+from api.schemas import TripRequest
+from graph.builder import compiled_graph
 
 router = APIRouter(prefix="/api/v1")
 

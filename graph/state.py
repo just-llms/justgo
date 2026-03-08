@@ -3,7 +3,7 @@ from __future__ import annotations
 import operator
 from typing import Annotated, TypedDict
 
-from app.api.schemas import (
+from api.schemas import (
     BudgetAllocation,
     FlightOption,
     HotelOption,

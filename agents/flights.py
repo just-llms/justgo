@@ -15,8 +15,8 @@ from langchain_community.tools.amadeus.base import AmadeusBaseTool
 from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_google_genai import ChatGoogleGenerativeAI
 
-from app.api.schemas import FlightOption
-from app.config import settings
+from api.schemas import FlightOption
+from config import settings
 
 logger = structlog.get_logger()
 

@@ -53,7 +53,7 @@ The app is built with **FastAPI** and **LangGraph**. A single plan request runs:
 ## Run
 
 ```bash
-uvicorn app.main:app --reload --port 8000
+uvicorn main:app --reload --port 8000
 ```
 
 - API: `http://127.0.0.1:8000`
@@ -109,28 +109,27 @@ Budgets are in **INR**. Flight prices from Amadeus (often EUR) are converted to 
 ## Project structure
 
 ```
-app/
-  main.py              # FastAPI app, CORS, LangSmith env, logging
-  config.py            # Pydantic Settings (env vars)
-  api/
-    routes.py          # GET /health, POST /plan
-    schemas.py         # TripRequest, BudgetAllocation, FlightOption, etc.
-  graph/
-    state.py           # TravelState TypedDict
-    budget.py          # budget_allocator_node
-    builder.py         # LangGraph: budget → parallel agents → ranking → itinerary
-  agents/
-    research.py        # Tavily + Gemini
-    flights.py         # Amadeus + Gemini, forex to INR
-    hotels.py         # Airbnb MCP + Gemini (Tavily fallback)
-    transport.py       # Tavily + Gemini
-    itinerary.py       # Gemini: merge state → markdown itinerary
-    prompts/           # .txt system prompts per agent
-  tools/
-    tavily.py          # TavilySearch wrapper
-    airbnb.py          # MCP client for @openbnb/mcp-server-airbnb
-  utils/
-    logging.py         # structlog setup
+main.py                # FastAPI app, CORS, LangSmith env, logging
+config.py              # Pydantic Settings (env vars)
+api/
+  routes.py            # GET /health, POST /plan
+  schemas.py           # TripRequest, BudgetAllocation, FlightOption, etc.
+graph/
+  state.py             # TravelState TypedDict
+  budget.py            # budget_allocator_node
+  builder.py           # LangGraph: budget → parallel agents → ranking → itinerary
+agents/
+  research.py          # Tavily + Gemini
+  flights.py           # Amadeus + Gemini, forex to INR
+  hotels.py            # Airbnb MCP + Gemini (Tavily fallback)
+  transport.py         # Tavily + Gemini
+  itinerary.py         # Gemini: merge state → markdown itinerary
+  prompts/             # .txt system prompts per agent
+tools/
+  tavily.py            # TavilySearch wrapper
+  airbnb.py            # MCP client for @openbnb/mcp-server-airbnb
+utils/
+  logging.py           # structlog setup
 ```
 
 ## Tech stack

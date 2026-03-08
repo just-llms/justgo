@@ -3,7 +3,7 @@ from __future__ import annotations
 from langchain_tavily import TavilySearch
 from tenacity import retry, stop_after_attempt, wait_exponential
 
-from app.config import settings
+from config import settings
 
 tavily_tool = TavilySearch(
     max_results=5,

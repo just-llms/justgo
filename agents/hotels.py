@@ -9,10 +9,10 @@ import structlog
 from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_google_genai import ChatGoogleGenerativeAI
 
-from app.api.schemas import HotelOption
-from app.config import settings
-from app.tools.airbnb import airbnb_search
-from app.tools.tavily import tavily_search
+from api.schemas import HotelOption
+from config import settings
+from tools.airbnb import airbnb_search
+from tools.tavily import tavily_search
 
 logger = structlog.get_logger()
 
